@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-class wiki:
+class google:
   def __init__(self):
         self.headers = {'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.3'}
         self.url = 'https://www.google.com/search?q='
@@ -24,5 +24,5 @@ class wiki:
     for link in result_links:
         text = link.text.lower()
         if search_words in text:  
-          send_link.add(link.get('href'))
-    return send_link
+          send_link.add(link.get('href'))  
+    return send_link 
