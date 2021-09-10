@@ -25,4 +25,4 @@ class book:
         text = link.text.lower()
         if search_words in text:  
           send_link.add(link.get('href'))  
-    return send_link 
+    return send_link

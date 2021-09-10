@@ -7,13 +7,14 @@ token = os.environ['TOKEN']
 
 client = discord.Client() 
 
-ball = ["sim", "não", "talvez"]
-##
-wiki_url = 'https://pt.wikipedia.org/wiki/Especial:Pesquisar/'
-##
-
 book = WebScraping.book()
-no_result_message = '''Não conseguimos encontrar o livro que você deseja :-/'''
+
+wiki_url = 'https://pt.wikipedia.org/wiki/Especial:Pesquisar/'
+dicio_url = 'https://www.dicio.com.br/'
+
+coinflip = ['coroa', 'cara']
+
+decisao = ["sim", "não", "talvez"]
 
 @client.event
 async def on_message(message):
@@ -34,11 +35,15 @@ async def on_message(message):
   if msg.startswith('<3doc pandas'):
     await message.channel.send('https://pandas.pydata.org/docs/')
 
-  #8Ball
+  #Decisão aleatoria
   if msg.startswith('<3decida'):
-    await message.channel.send(random.choice(ball))
+    await message.channel.send(random.choice(decisao))
   
-  #ScrapingWeb, erro => todos os resultados são enviados gerando SPAM, desejavel que apenas o primeiro resultado seja enviado como mensagem 
+  #Coinflip
+  if msg.startswith('<3coinflip'):
+    await message.channel.send(random.choice(coinflip))
+
+  #ScrapingWeb para conseguir ebooks da libgen
   if '<3book' in msg:
     key_words, search_words = book.key_words_search_words(msg)
     result_links = book.search(key_words)
@@ -50,14 +55,19 @@ async def on_message(message):
     elif len(links) > 0 and len(links) > 5:
       await message.channel.send('Achamos tantos resultados que seria melhor você selecionar o que deseja em: https://libgen.is/search.php?req=' + search_words.replace(' ','+'))
     else:
-     await message.channel.send(no_result_message)
+     await message.channel.send('Não conseguimos encontrar o livro que você deseja :-/')
 
   #Pesquisar na wikipedia
   if msg.startswith('<3wiki'):
     word = msg.split("<3wiki ", 1)[1]
     search_word = word.replace(' ','_')
     await message.channel.send(wiki_url + search_word)
-    
 
+  #Dicionario
+  if msg.startswith('<3dicio'):
+    word = msg.split("<3dicio ", 1)[1]
+    search_word = word.replace(' ','_')
+    await message.channel.send(dicio_url + search_word)
+    
 client.run(token)
 
