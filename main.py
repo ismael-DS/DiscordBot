@@ -12,8 +12,8 @@ ball = ["sim", "não", "talvez"]
 wiki_url = 'https://pt.wikipedia.org/wiki/Especial:Pesquisar/'
 ##
 
-#google = WebScraping.google()
-#no_result_message = '''Não conseguimos encontrar nenhum relacionada a isso :-/'''
+book = WebScraping.book()
+no_result_message = '''Não conseguimos encontrar o livro que você deseja :-/'''
 
 @client.event
 async def on_message(message):
@@ -39,22 +39,24 @@ async def on_message(message):
     await message.channel.send(random.choice(ball))
   
   #ScrapingWeb, erro => todos os resultados são enviados gerando SPAM, desejavel que apenas o primeiro resultado seja enviado como mensagem 
-  #if '<3search' in msg:
-    #key_words, search_words = google.key_words_search_words(msg)
-    #result_links = google.search(key_words)
-    #links = google.send_link(result_links, search_words)
+  if '<3book' in msg:
+    key_words, search_words = book.key_words_search_words(msg)
+    result_links = book.search(key_words)
+    links = book.send_link(result_links, search_words)
     
-    ##if len(links) > 0:
-     #for link in links:
-      ##await message.channel.send(link)
-    #else:
-     #await message.channel.send(no_result_message)
+    if len(links) > 0 and len(links) < 5:
+     for link in links:
+      await message.channel.send('https://libgen.is/' + link)
+    elif len(links) > 0 and len(links) > 5:
+      await message.channel.send('Achamos tantos resultados que seria melhor você selecionar o que deseja em: https://libgen.is/search.php?req=' + search_words.replace(' ','+'))
+    else:
+     await message.channel.send(no_result_message)
 
   #Pesquisar na wikipedia
-  if msg.startswith('wiki'):
-    words = msg.split("wiki ", 1)[1]
-    search_words = words.replace(' ','_')
-    await message.channel.send(wiki_url + search_words)
+  if msg.startswith('<3wiki'):
+    word = msg.split("<3wiki ", 1)[1]
+    search_word = word.replace(' ','_')
+    await message.channel.send(wiki_url + search_word)
     
 
 client.run(token)

@@ -1,10 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
 
-class google:
+class book:
   def __init__(self):
         self.headers = {'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.3'}
-        self.url = 'https://www.google.com/search?q='
+        self.url = 'https://libgen.is/search.php?req='
 
   def key_words_search_words(self, user_message):
     words = user_message.split()[1:]
