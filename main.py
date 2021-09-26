@@ -1,21 +1,27 @@
 import os
 import discord
+from discord.ext import commands
+import music
 import random
 import WebScraping
 
-token = os.environ['TOKEN']
-
-client = discord.Client() 
-
-book = WebScraping.book()
-
-wiki_url = 'https://pt.wikipedia.org/wiki/Especial:Pesquisar/'
-dicio_url = 'https://www.dicio.com.br/'
-
-coinflip = ['coroa', 'cara']
+token = os.environ['TOKEN'] ##Token encripitado do bot
 
 decisao = ["sim", "não", "talvez"]
+coinflip = ['coroa', 'cara']
+dicio_url = 'https://www.dicio.com.br/'
+wiki_url = 'https://pt.wikipedia.org/wiki/Especial:Pesquisar/'
+book = WebScraping.book()
 
+##modulo de musica
+cogs = [music]
+
+client = commands.Bot(command_prefix='a!', intents = discord.Intents.all())
+
+for i in range(len(cogs)):
+  cogs[i].setup(client)
+
+##comandos
 @client.event
 async def on_message(message):
   if message.author == client.user:
@@ -24,24 +30,36 @@ async def on_message(message):
   msg = message.content.lower() 
 
   #Teste de conexão
-  if msg.startswith('<3ping'):
+  if msg.startswith('a!ping'):
     await message.channel.send('Pong')
 
-  #Conseguir documentação de linguagens
-  if msg.startswith('<3doc'):
-    await message.channel.send ('Consiga a documentação das linguagens escrevendo **"<3Doc" + o nome de cada lang**. Comandos aceitos: ```<3Doc python | <3Doc pandas```')
-  if msg.startswith('<3doc python'):
+  #Decisão aleatoria
+  if msg.startswith('a!decida'):
+    await message.channel.send(random.choice(decisao))
+
+  #Conseguir documentação de linguagens de programação
+  if 'a!doc' == msg:
+    await message.channel.send ('Consiga a documentação das linguagens escrevendo **"a!Doc" + o nome de cada lang**. Comandos aceitos: ```a!Doc python | a!Doc pandas```')
+  if msg.startswith('a!doc python'):
     await message.channel.send('https://docs.python.org/pt-br/3/tutorial/')
-  if msg.startswith('<3doc pandas'):
+  if msg.startswith('a!doc pandas'):
     await message.channel.send('https://pandas.pydata.org/docs/')
 
-  #Decisão aleatoria
-  if msg.startswith('<3decida'):
-    await message.channel.send(random.choice(decisao))
-  
   #Coinflip
   if msg.startswith('<3coinflip'):
     await message.channel.send(random.choice(coinflip))
+
+  #Dicionario
+  if msg.startswith('<3dicio'):
+    word = msg.split("<3dicio ", 1)[1]
+    search_word = word.replace(' ','_')
+    await message.channel.send(dicio_url + search_word)
+
+  #Pesquisar na wikipedia
+  if msg.startswith('<3wiki'):
+    word = msg.split("<3wiki ", 1)[1]
+    search_word = word.replace(' ','_')
+    await message.channel.send(wiki_url + search_word)
 
   #ScrapingWeb para conseguir ebooks da libgen
   if '<3book' in msg:
@@ -57,17 +75,4 @@ async def on_message(message):
     else:
      await message.channel.send('Não conseguimos encontrar o livro que você deseja :-/')
 
-  #Pesquisar na wikipedia
-  if msg.startswith('<3wiki'):
-    word = msg.split("<3wiki ", 1)[1]
-    search_word = word.replace(' ','_')
-    await message.channel.send(wiki_url + search_word)
-
-  #Dicionario
-  if msg.startswith('<3dicio'):
-    word = msg.split("<3dicio ", 1)[1]
-    search_word = word.replace(' ','_')
-    await message.channel.send(dicio_url + search_word)
-    
 client.run(token)
-
