@@ -1,7 +1,5 @@
 import os
 import discord
-from discord.ext import commands
-import music
 import random
 import WebScraping
 
@@ -12,14 +10,6 @@ coinflip = ['coroa', 'cara']
 dicio_url = 'https://www.dicio.com.br/'
 wiki_url = 'https://pt.wikipedia.org/wiki/Especial:Pesquisar/'
 book = WebScraping.book()
-
-##modulo de musica
-cogs = [music]
-
-client = commands.Bot(command_prefix='a!', intents = discord.Intents.all())
-
-for i in range(len(cogs)):
-  cogs[i].setup(client)
 
 ##comandos
 @client.event
