@@ -35,6 +35,10 @@ async def on_message(message):
   if msg.startswith('a!doc pandas'):
     await message.channel.send('https://pandas.pydata.org/docs/')
 
+  #Redes sociais
+  if msg == 'd!redes':
+    await message.channel.send('https://linktr.ee/Ismael.M.Araujo')
+
   #Coinflip
   if msg.startswith('<3coinflip'):
     await message.channel.send(random.choice(coinflip))
